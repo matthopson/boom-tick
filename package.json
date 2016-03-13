@@ -1,0 +1,20 @@
+{
+  "name": "boom-tick",
+  "description": "Create a timer and attach events to it.",
+  "homepage": "https://github.com/krambuhl/npm-module-boilerplate",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape tests/*.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:matthopson/boom-tick.git"
+  },
+  "author": "Matt Hopson",
+  "license": "MIT",
+  "devDependencies": {
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3"
+  }
+}
