@@ -1,3 +1,27 @@
+if(window) {
+  require('./customEvent.js');
+}
+
+var TimedEvent = function() {
+  this.time = 0;
+  this.handler = null;
+  this.customEvent = null;
+}
+
+// Looks for events in the `timedEvents` Array and fires them at the apporpriate time.
+var fireEvents = function(timer){
+  var evs = timer.timedEvents;
+  var currentTime = timer.currentTime;
+  if(evs.hasOwnProperty(currentTime)){
+    evs[currentTime].forEach(function(ev){
+      ev.handler.call(timer);
+      if(ev.customEvent){
+        window.dispatchEvent(ev.customEvent);
+      }
+    });
+  }
+}
+
 module.exports = {
   interval: null,
   currentTime: null,
@@ -43,7 +67,9 @@ module.exports = {
       }else{
         _this.currentTime = _this.currentTime + 1;
       }
-      console.log(_this.currentTime);
+
+      fireEvents(_this);
+
       if(_this.currentTime == 0 || (_this.isCountdown && _this.currentTime == _this.endTime)){
         _this.done();
       }
@@ -64,12 +90,22 @@ module.exports = {
   // Stops timer and fires callback
   done: function() {
     this.stop();
-    console.log(timerFinishedEvent);
   },
 
   // Create a timed event
-  createEvent: function() {
+  createEvent: function(time, handler, eventName) {
+    var ev = new TimedEvent();
+    ev.time = parseInt(time);
+    ev.handler = handler;
+    if(eventName){
+      event = new window.CustomEvent(eventName);
+      ev.customEvent = event;
+    }
 
+    if(!this.timedEvents.hasOwnProperty(ev.time)){
+      this.timedEvents[ev.time] = [];
+    }
+    this.timedEvents[ev.time].push(ev);
   }
 
 }
